@@ -41,12 +41,12 @@ Terimakasih
 ## Instalasi
 1. Clone repository:
    ```bash
-   git clone https://github.com/fauzihazim/TakeHomeTestNutech.git ```
+   git clone https://github.com/fauzihazim/TakeHomeTestNutech.git 
 
 2. Menuju ke folder tersebut
     ```bash
-   cd TakeHomeTestNutech ```
+   cd TakeHomeTestNutech 
 3. Menjalankan project dengan Docker
     ```bash
-   docker-compose up -d --build ```
+   docker-compose up -d --build 
 
