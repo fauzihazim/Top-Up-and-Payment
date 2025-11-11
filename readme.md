@@ -5,8 +5,6 @@
 ## Disclaimer
 **Proyek ini dibuat khusus untuk keperluan take home test dalam proses rekrutmen kerja sesuai dengan requirement proyek yang diminta beserta tambahan agar aplikasi berjalan dengan lebih baik.**
 
-Saya harap proyek ini menjadi gambaran terhadap kemampuan saya. Besar harapan saya untuk diterima di perusahaan ini. Selain itu, saya mohon kritik, saran, dan masukan terhadap proyek yang saya kerjakan ini melalui email saya [fauzihazim28@gmail.com](mailto:fauzihazim28@gmail.com) sehingga saya bisa terus berkembang.
-
 Terimakasih 
 
 ## Fitur
