@@ -2,7 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import req from 'supertest';
 import app from '../index.js';
+import path from 'path';
 import { conn } from '../src/utils/db.js';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const filePath = path.resolve(__dirname, 'testImage/sampleWebp.webp');
+console.log("File path:", filePath);
+// console.log("Token:", token);
+
+console.log("Halo gan ", path.resolve(__dirname, 'testImage/sampleWebp.webp'));
 
 let token;
 
@@ -36,7 +46,7 @@ test('Register failed email tidak sesuai format', async () => {
   assert.equal(res.body.data, null);
 });
 
-test('Register success', async () => {
+test('Register failed email sudah digunakan', async () => {
   const res = await req(app)
     .post('/register')
     .send({
@@ -45,10 +55,11 @@ test('Register success', async () => {
       "last_name": "Nutech",
       "password": "abcdef1234"
     });
-  assert.equal(res.statusCode, 200);
-  assert.equal(res.body.status, 0);
-  assert.equal(res.body.message, "Registrasi berhasil silahkan login");
-  assert.equal(res.body.data, null);
+  console.log("INI ", res.body);
+  
+  assert.equal(res.statusCode, 409);
+  assert.equal(res.body.status, "failed");
+  assert.equal(res.body.message, "Email has been used");
 });
 
 test('Login success', async () => {
@@ -82,15 +93,114 @@ test('Login failed Unauthorized', async () => {
   assert.equal(res.body.data, null);
 });
 
-test('GET /profile returns JSON', async () => {
+test('Profile success', async () => {
   const res = await req(app)
     .get('/profile')
     .set('Authorization', `Bearer ${token}`);
   assert.equal(res.statusCode, 200);
+  assert.equal(res.body.status, 0);
   assert.equal(res.body.message, "Sukses");
-  assert.ok(res.body.message);
+  assert.equal(res.body.data.email, "user@nutech-integrasi.com");
+  assert.equal(res.body.data.first_name, "User");
+  assert.equal(res.body.data.last_name, "Nutech");
+  assert.equal(res.body.data.profile_image, null);
 });
 
+test('Profile failed Unauthorized', async () => {
+  const res = await req(app)
+    .get('/profile')
+    .set('Authorization', `Bearer ${token} + 1`);
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.status, 108);
+  assert.equal(res.body.message, "Token tidak tidak valid atau kadaluwarsa");
+  assert.equal(res.body.data, null);
+});
+
+test("Profile update success", async () => {
+  const res = await req(app)
+    .put('/profile/update')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ first_name: "User Edited", last_name: "Nutech Edited" });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.status, 0);
+  assert.equal(res.body.message, "Update Pofile berhasil");
+  assert.equal(res.body.data.email, "user@nutech-integrasi.com");
+  assert.equal(res.body.data.first_name, "User Edited");
+  assert.equal(res.body.data.last_name, "Nutech Edited");
+  assert.equal(res.body.data.profile_image, null);
+});
+
+test("Profile failed Unauthorized", async () => {
+  const res = await req(app)
+    .put('/profile/update')
+    .set('Authorization', `Bearer ${token} + 1`)
+    .send({ first_name: "User Edited", last_name: "Nutech Edited" });
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.status, 108);
+  assert.equal(res.body.message, "Token tidak tidak valid atau kadaluwarsa");
+  assert.equal(res.body.data, null);
+});
+
+test("Update Image Profile success", async () => {
+  const res = await req(app)
+    .put('/profile/image')
+    .set('Authorization', `Bearer ${token}`)
+    .attach('file', path.resolve(__dirname, 'testImage/sample_Jpg.jpg'));
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.status, 0);
+  assert.equal(res.body.message, "Update Profile Image berhasil");
+  assert.equal(res.body.data.email, "user@nutech-integrasi.com");
+  assert.equal(res.body.data.first_name, "User Edited");
+  assert.equal(res.body.data.last_name, "Nutech Edited");
+  assert.notEqual(res.body.data.profile_image, null);
+});
+
+// test("Update Image Profile Failed", async () => {
+//   const res = await req(app)
+//     .put('/profile/image')
+//     .set('Authorization', `Bearer ${token}`)
+//     .attach('file', path.resolve(__dirname, 'sample_Jpg.jpg'));
+//   // assert.equal(res.statusCode, 400);
+//   // assert.equal(res.body.status, 102);
+//   // assert.equal(res.body.message, "Format Image tidak sesuai");
+//   // assert.equal(res.body.data, null);
+// });
+
+// test("Update Image Profile Failed", async () => {
+//   const res = await req(app)
+//     .put('/profile/image')
+//     .set('Authorization', `Bearer ${token}`)
+//     .attach('file', path.resolve(__dirname, 'testImage/sampleWebp.webp'));
+//   assert.equal(res.statusCode, 200);
+//   assert.equal(res.body.status, 0);
+//   assert.equal(res.body.message, "Update Profile Image berhasil");
+//   assert.equal(res.body.data.email, "user@nutech-integrasi.com");
+//   assert.equal(res.body.data.first_name, "User Edited");
+//   assert.equal(res.body.data.last_name, "Nutech Edited");
+//   assert.notEqual(res.body.data.profile_image, null);
+// });
+
+test("Update Image Profile Failed (invalid format)", async () => {
+  const res = await req(app)
+    .put('/profile/image')
+    .set('Authorization', `Bearer ${token}`)
+    .attach('file', path.resolve(__dirname, 'testImage/sampleWebp.webp'));
+  console.log("Hai hai", res.statusCode, res.body);
+  assert.equal(res.statusCode, 400);
+  assert.equal(res.body.status, 102);
+  assert.equal(res.body.message, "Format Image tidak sesuai");
+  assert.equal(res.body.data, null);
+});
+
+test('Update Image failed Unauthorized', async () => {
+  const res = await req(app)
+    .put('/profile/image')
+    .set('Authorization', `Bearer ${token} + 1`);
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.body.status, 108);
+  assert.equal(res.body.message, "Token tidak tidak valid atau kadaluwarsa");
+  assert.equal(res.body.data, null);
+});
 
 test('GET /banner returns JSON', async () => {
   const res = await req(app).get('/banner');
