@@ -25,7 +25,7 @@ export const getBalance = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: "failed",
-            error: "Internal server error"
+            message: "Internal server error"
         });
     }
 }
@@ -82,11 +82,11 @@ export const topUp = async (req, res) => {
                 }
             }
         } catch (rollbackError) {
-            console.error('Rollback error:', rollbackError);
+            console.error('Rollback message:', rollbackError);
         }
         res.status(500).json({
             status: "failed",
-            error: "Internal server error"
+            message: "Internal server error"
         });
     } finally {
         if (connection) connection.release();
@@ -167,11 +167,11 @@ export const payment = async (req, res) => {
                 }
             }
         } catch (rollbackError) {
-            console.error('Rollback error:', rollbackError);
+            console.error('Rollback message:', rollbackError);
         } finally {
             res.status(500).json({
                 status: "failed",
-                error: "Internal server error"
+                message: "Internal server error"
             });
         }
     } finally {
@@ -180,22 +180,18 @@ export const payment = async (req, res) => {
 };
 
 export const getHistories = async (req, res) => {
-  try {
-    const userId = res.locals.userId;
-    const offset = parseInt(req.query.offset) || 0;
-    const limit = parseInt(req.query.limit) || 10;
-
-    const history = await getTransactionHistory(userId, offset, limit);
-
-    res.status(200).json({
-      status: 0,
-      message: "Get History Berhasil",
-      data: history
-    });
+    try {
+        const userId = res.locals.userId;
+        const history = await getTransactionHistory(userId);
+        res.status(200).json({
+            status: 0,
+            message: "Get History Berhasil",
+            data: history
+        });
   } catch (error) {
     res.status(500).json({
         status: "failed",
-        error: "Internal server error"
+        message: "Internal server error"
     });
   }
 };
@@ -220,5 +216,6 @@ const getTransactionHistory = async (userId) => {
     LEFT JOIN payments p ON t.id = p.idTransaction AND t.transaction_type = 'PAYMENT'
     WHERE t.idUser = ?
     ORDER BY t.id DESC`, [userId]);
-  return records;
+
+    return records;
 };

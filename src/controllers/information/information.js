@@ -13,7 +13,7 @@ export const getBanners = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: "failed",
-            error: "Internal server error"
+            message: "Internal server error"
         });
     }
 }
@@ -23,7 +23,6 @@ export const getServices = async (req, res) => {
         const [services] = await conn.execute(
             'SELECT service_code, service_name, service_icon, service_tariff FROM services'
         );
-        console.log(services);
         res.status(200).json({
             status: 0,
             message: "Sukses",
@@ -32,7 +31,7 @@ export const getServices = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: "failed",
-            error: "Internal server error"
+            message: "Internal server error"
         });
     }
 }
