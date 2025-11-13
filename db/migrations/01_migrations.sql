@@ -53,8 +53,6 @@ CREATE TABLE IF NOT EXISTS `payments` (
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`idTransaction`) REFERENCES `transactions` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-
-
 CREATE TABLE IF NOT EXISTS `topup` (
   `idTopUp` int NOT NULL AUTO_INCREMENT,
   `idTransaction` int NOT NULL,
