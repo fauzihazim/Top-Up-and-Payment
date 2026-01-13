@@ -1,11 +1,8 @@
-# Take Home Test Nutech
+# Top Up and Payment
 
 ![Node.js](https://logos-download.com/wp-content/uploads/2016/09/Node_logo_NodeJS.png)
-
-## Disclaimer
-**Proyek ini dibuat khusus untuk keperluan take home test dalam proses rekrutmen kerja sesuai dengan requirement proyek yang diminta beserta tambahan agar aplikasi berjalan dengan lebih baik.**
-
-Terimakasih 
+## Keterangan
+Repositori ini berisi implementasi backend untuk sistem Top Up dan Pembayaran (Node.js + MySQL). Selain itu dilengkapi dengan Nginx sebagai load balancer untuk menjaga performa utamanya ketika load tinggi dan Docker untuk menghindari dependency conflict. Aplikasi memiliki alur dan fitur berikut: registrasi dan autentikasi (JWT), manajemen profil dan unggah gambar, daftar banner & layanan, pengecekan saldo, Top Up, proses pembayaran, serta riwayat transaksi. Tujuan utamanya adalah untuk menunjukkan arsitektur API dan integrasi fungsionalitas; untuk penggunaan produksi diperlukan pengujian tambahan, audit keamanan, penanganan skala, validasi input lebih ketat, dan pengaturan konfigurasi deployment.
 
 ## Fitur
 
@@ -39,11 +36,11 @@ Terimakasih
 ## Instalasi
 1. Clone repository:
    ```bash
-   git clone https://github.com/fauzihazim/TakeHomeTestNutech.git 
+   git clone https://github.com/fauzihazim/Top-Up-and-Payment.git
 
 2. Menuju ke folder tersebut
     ```bash
-   cd TakeHomeTestNutech 
+   cd "top up and payment" 
 3. Menjalankan project dengan Docker
     ```bash
    docker-compose up -d --build 
