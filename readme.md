@@ -44,4 +44,7 @@ Repositori ini berisi implementasi backend untuk sistem Top Up dan Pembayaran (N
 3. Menjalankan project dengan Docker
     ```bash
    docker-compose up -d --build 
+4. Testing
+   ``` bash
+   npm test
 
