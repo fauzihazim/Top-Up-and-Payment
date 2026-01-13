@@ -40,7 +40,7 @@ Repositori ini berisi implementasi backend untuk sistem Top Up dan Pembayaran (N
 
 2. Menuju ke folder tersebut
     ```bash
-   cd "top up and payment" 
+   cd top-up-and-payment 
 3. Menjalankan project dengan Docker
     ```bash
    docker-compose up -d --build 
